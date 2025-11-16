@@ -40,8 +40,14 @@
     </style>
 </head>
 <body class="bg-background-light dark:bg-background-dark font-display text-gray-800 dark:text-gray-200">
+<!-- Mobile menu button -->
+<button id="mobile-menu-btn" class="fixed top-4 left-4 z-30 lg:hidden flex items-center justify-center w-10 h-10 rounded-lg bg-card-light dark:bg-card-dark border border-gray-200 dark:border-[#324467] shadow-lg">
+    <span class="material-symbols-outlined text-gray-900 dark:text-white">menu</span>
+</button>
+<!-- Mobile overlay -->
+<div id="mobile-overlay" class="fixed inset-0 bg-black/60 z-20 lg:hidden" style="display:none;"></div>
 <div class="relative flex min-h-screen w-full">
-<aside class="fixed left-0 top-0 w-64 h-screen flex flex-col bg-card-light dark:bg-card-dark p-4 border-r border-gray-200 dark:border-[#324467] z-20 overflow-y-auto">
+<aside id="sidebar" class="fixed left-0 top-0 w-64 h-screen flex flex-col bg-card-light dark:bg-card-dark p-4 border-r border-gray-200 dark:border-[#324467] z-20 overflow-y-auto transition-transform duration-300 -translate-x-full lg:translate-x-0">
 <div class="flex items-center gap-3 mb-8 px-3">
 <span class="material-symbols-outlined text-primary text-3xl">account_balance_wallet</span>
 <h1 class="text-xl font-bold text-gray-900 dark:text-white">Monely</h1>
@@ -86,20 +92,21 @@
 </button>
 </div>
 </aside>
-<main class="flex-1 p-8 overflow-y-auto ml-64">
+<main class="flex-1 p-4 sm:p-6 lg:p-8 overflow-y-auto lg:ml-64">
 <div class="max-w-7xl mx-auto">
 <section id="dashboard-section">
-<div class="flex flex-wrap justify-between items-center gap-4 mb-8">
+<div class="flex flex-wrap justify-between items-center gap-4 mb-6 lg:mb-8 mt-12 lg:mt-0">
 <div class="flex flex-col gap-1">
-<h1 class="text-gray-900 dark:text-white text-3xl font-bold leading-tight">Dashboard</h1>
+<h1 class="text-gray-900 dark:text-white text-2xl sm:text-3xl font-bold leading-tight">Dashboard</h1>
 <p class="text-muted-light dark:text-muted-dark">Resumen financiero del mes actual.</p>
 </div>
-<button id="add-transaction-btn" class="flex items-center justify-center gap-2 overflow-hidden rounded-lg h-10 px-4 bg-primary text-white text-sm font-bold leading-normal tracking-[0.015em] hover:bg-primary/90 shadow-sm">
+<button id="add-transaction-btn" class="flex items-center justify-center gap-2 overflow-hidden rounded-lg h-10 px-3 sm:px-4 bg-primary text-white text-sm font-bold leading-normal tracking-[0.015em] hover:bg-primary/90 shadow-sm">
 <span class="material-symbols-outlined text-base">add</span>
-<span class="truncate">Añadir Transacción</span>
+<span class="truncate hidden sm:inline">Añadir Transacción</span>
+<span class="truncate sm:hidden">Añadir</span>
 </button>
 </div>
-<div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 mb-6 lg:mb-8">
 <div class="bg-card-light dark:bg-card-dark p-6 rounded-xl border border-gray-200 dark:border-[#324467] shadow-sm">
 <div class="flex items-center gap-4 mb-2">
 <div class="p-2 bg-green-100 dark:bg-green-900/50 rounded-lg">
@@ -107,7 +114,7 @@
 </div>
 <h2 class="text-muted-light dark:text-muted-dark font-medium">Total ingresos del mes</h2>
 </div>
-<p id="total-income" class="text-green-600 dark:text-green-400 text-4xl font-bold leading-tight tracking-tight">$0.00</p>
+<p id="total-income" class="text-green-600 dark:text-green-400 text-2xl sm:text-3xl lg:text-4xl font-bold leading-tight tracking-tight">$0.00</p>
 </div>
 <div class="bg-card-light dark:bg-card-dark p-6 rounded-xl border border-gray-200 dark:border-[#324467] shadow-sm">
 <div class="flex items-center gap-4 mb-2">
@@ -116,7 +123,7 @@
 </div>
 <h2 class="text-muted-light dark:text-muted-dark font-medium">Total gastos del mes</h2>
 </div>
-<p id="total-expense" class="text-red-600 dark:text-red-400 text-4xl font-bold leading-tight tracking-tight">$0.00</p>
+<p id="total-expense" class="text-red-600 dark:text-red-400 text-2xl sm:text-3xl lg:text-4xl font-bold leading-tight tracking-tight">$0.00</p>
 </div>
 <div class="bg-card-light dark:bg-card-dark p-6 rounded-xl border border-gray-200 dark:border-[#324467] shadow-sm">
 <div class="flex items-center gap-4 mb-2">
@@ -125,7 +132,7 @@
 </div>
 <h2 class="text-muted-light dark:text-muted-dark font-medium">Balance</h2>
 </div>
-<p id="total-balance" class="text-gray-900 dark:text-white text-4xl font-bold leading-tight tracking-tight">$0.00</p>
+<p id="total-balance" class="text-gray-900 dark:text-white text-2xl sm:text-3xl lg:text-4xl font-bold leading-tight tracking-tight">$0.00</p>
 </div>
 </div>
 <div class="bg-card-light dark:bg-card-dark p-6 rounded-xl border border-gray-200 dark:border-[#324467] shadow-sm">
@@ -133,14 +140,14 @@
 <h2 class="text-gray-900 dark:text-white text-lg font-bold leading-tight">Últimas transacciones</h2>
 <a id="view-all-transactions" class="text-sm font-medium text-primary hover:underline" href="#">Ver todas</a>
 </div>
-<div class="overflow-x-auto">
-<table class="w-full text-left">
+<div class="overflow-x-auto -mx-4 sm:mx-0">
+<table class="w-full text-left min-w-[600px]">
 <thead>
 <tr class="border-b border-gray-200 dark:border-[#324467]">
-<th class="p-4 text-sm font-semibold text-muted-light dark:text-gray-400">Fecha</th>
-<th class="p-4 text-sm font-semibold text-muted-light dark:text-gray-400">Descripción</th>
-<th class="p-4 text-sm font-semibold text-muted-light dark:text-gray-400">Categoría</th>
-<th class="p-4 text-sm font-semibold text-muted-light dark:text-gray-400 text-right">Monto</th>
+<th class="p-2 sm:p-4 text-xs sm:text-sm font-semibold text-muted-light dark:text-gray-400">Fecha</th>
+<th class="p-2 sm:p-4 text-xs sm:text-sm font-semibold text-muted-light dark:text-gray-400">Descripción</th>
+<th class="p-2 sm:p-4 text-xs sm:text-sm font-semibold text-muted-light dark:text-gray-400">Categoría</th>
+<th class="p-2 sm:p-4 text-xs sm:text-sm font-semibold text-muted-light dark:text-gray-400 text-right">Monto</th>
 </tr>
 </thead>
 <tbody id="transactions-tbody">
@@ -151,25 +158,25 @@
 </section>
 
 <section id="transactions-section" style="display:none">
-    <h1 class="text-gray-900 dark:text-white text-3xl font-bold leading-tight mb-4">Transacciones</h1>
-    <div class="bg-card-light dark:bg-card-dark p-6 rounded-xl border border-gray-200 dark:border-[#324467] shadow-sm mb-6">
-        <form id="transaction-form" class="flex flex-wrap gap-4 items-end">
-            <div>
+    <h1 class="text-gray-900 dark:text-white text-2xl sm:text-3xl font-bold leading-tight mb-4 mt-12 lg:mt-0">Transacciones</h1>
+    <div class="bg-card-light dark:bg-card-dark p-4 sm:p-6 rounded-xl border border-gray-200 dark:border-[#324467] shadow-sm mb-6">
+        <form id="transaction-form" class="grid grid-cols-1 sm:grid-cols-2 lg:flex lg:flex-wrap gap-4 items-end">
+            <div class="sm:col-span-1">
                 <label class="block text-sm font-medium text-muted-light dark:text-muted-dark mb-1">Fecha</label>
                 <input type="date" class="form-input rounded-lg w-full" id="transaction-date" required />
             </div>
-            <div>
+            <div class="sm:col-span-1">
                 <label class="block text-sm font-medium text-muted-light dark:text-muted-dark mb-1">Tipo</label>
                 <select id="transaction-type" class="form-select rounded-lg w-full">
                     <option value="Ingreso">Ingreso</option>
                     <option value="Gasto">Gasto</option>
                 </select>
             </div>
-            <div>
+            <div class="sm:col-span-2">
                 <label class="block text-sm font-medium text-muted-light dark:text-muted-dark mb-1">Descripción</label>
                 <input type="text" class="form-input rounded-lg w-full" id="transaction-desc" required />
             </div>
-            <div>
+            <div class="sm:col-span-2">
                 <label class="block text-sm font-medium text-muted-light dark:text-muted-dark mb-1">Categoría</label>
                 <select class="form-select rounded-lg w-full" id="transaction-category" required>
                     <!-- categories populated dynamically -->
@@ -179,18 +186,18 @@
                     <button id="add-category-btn" type="button" class="px-3 py-2 rounded-lg bg-gray-200 hover:bg-gray-300">Añadir</button>
                 </div>
             </div>
-            <div>
+            <div class="sm:col-span-1">
                 <label class="block text-sm font-medium text-muted-light dark:text-muted-dark mb-1">Monto</label>
                 <input type="number" step="0.01" class="form-input rounded-lg w-full" id="transaction-amount" required />
             </div>
-            <button type="submit" class="flex items-center gap-2 rounded-lg h-10 px-4 bg-primary text-white text-sm font-bold leading-normal tracking-[0.015em] hover:bg-primary/90 shadow-sm">Añadir</button>
+            <button type="submit" class="sm:col-span-2 lg:col-span-1 flex items-center justify-center gap-2 rounded-lg h-10 px-4 bg-primary text-white text-sm font-bold leading-normal tracking-[0.015em] hover:bg-primary/90 shadow-sm">Añadir</button>
         </form>
     </div>
     <div class="bg-card-light dark:bg-card-dark p-6 rounded-xl border border-gray-200 dark:border-[#324467] shadow-sm">
-        <h2 class="text-gray-900 dark:text-white text-lg font-bold leading-tight mb-4">Lista de transacciones</h2>
+        <h2 class="text-gray-900 dark:text-white text-base sm:text-lg font-bold leading-tight mb-4">Lista de transacciones</h2>
             <!-- Filters: tipo y categoría -->
-            <div class="flex flex-wrap items-center gap-3 mb-4">
-                <div>
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:flex lg:flex-wrap items-end gap-3 mb-4">
+                <div class="sm:col-span-1">
                     <label class="block text-sm text-muted-light mb-1">Tipo</label>
                     <select id="transactions-type-filter" class="form-select rounded-lg">
                         <option value="all">Todos</option>
@@ -198,32 +205,32 @@
                         <option value="Gasto">Gastos</option>
                     </select>
                 </div>
-                <div>
+                <div class="sm:col-span-1">
                     <label class="block text-sm text-muted-light mb-1">Desde</label>
                     <input id="transactions-start-date" type="date" class="form-input rounded-lg" />
                 </div>
-                <div>
+                <div class="sm:col-span-1">
                     <label class="block text-sm text-muted-light mb-1">Hasta</label>
                     <input id="transactions-end-date" type="date" class="form-input rounded-lg" />
                 </div>
-                <div>
+                <div class="sm:col-span-1">
                     <label class="block text-sm text-muted-light mb-1">Categoría</label>
-                    <select id="transactions-category-filter" class="form-select rounded-lg w-44">
+                    <select id="transactions-category-filter" class="form-select rounded-lg w-full lg:w-44">
                         <option value="all">Todas</option>
                     </select>
                 </div>
-                <div class="ml-auto">
-                    <button id="transactions-clear-filters" class="flex items-center gap-2 rounded-lg h-9 px-3 bg-primary text-white text-sm font-medium hover:bg-primary/90 shadow-sm">Limpiar filtros</button>
+                <div class="sm:col-span-2 lg:col-span-1 lg:ml-auto">
+                    <button id="transactions-clear-filters" class="w-full flex items-center justify-center gap-2 rounded-lg h-9 px-3 bg-primary text-white text-sm font-medium hover:bg-primary/90 shadow-sm">Limpiar filtros</button>
                 </div>
             </div>
-        <div class="overflow-x-auto">
-            <table class="w-full text-left">
+        <div class="overflow-x-auto -mx-4 sm:mx-0">
+            <table class="w-full text-left min-w-[600px]">
                 <thead>
                     <tr class="border-b border-gray-200 dark:border-[#324467]">
-                        <th class="p-4 text-sm font-semibold text-muted-light dark:text-gray-400">Fecha</th>
-                        <th class="p-4 text-sm font-semibold text-muted-light dark:text-gray-400">Descripción</th>
-                        <th class="p-4 text-sm font-semibold text-muted-light dark:text-gray-400">Categoría</th>
-                        <th class="p-4 text-sm font-semibold text-muted-light dark:text-gray-400 text-right">Monto</th>
+                        <th class="p-2 sm:p-4 text-xs sm:text-sm font-semibold text-muted-light dark:text-gray-400">Fecha</th>
+                        <th class="p-2 sm:p-4 text-xs sm:text-sm font-semibold text-muted-light dark:text-gray-400">Descripción</th>
+                        <th class="p-2 sm:p-4 text-xs sm:text-sm font-semibold text-muted-light dark:text-gray-400">Categoría</th>
+                        <th class="p-2 sm:p-4 text-xs sm:text-sm font-semibold text-muted-light dark:text-gray-400 text-right">Monto</th>
                     </tr>
                 </thead>
                 <tbody id="all-transactions-tbody">
@@ -234,7 +241,7 @@
 </section>
 
 <section id="reports-section" style="display:none">
-    <h1 class="text-gray-900 dark:text-white text-3xl font-bold leading-tight mb-4">Reportes</h1>
+    <h1 class="text-gray-900 dark:text-white text-2xl sm:text-3xl font-bold leading-tight mb-4 mt-12 lg:mt-0">Reportes</h1>
     <div class="flex items-center justify-between mb-4">
         <div class="text-muted-light dark:text-muted-dark">Visualiza tus gastos con filtros y periodos seleccionables.</div>
         <div class="flex items-center gap-2">
@@ -242,8 +249,8 @@
         </div>
     </div>
 
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <div class="md:col-span-2 flex gap-4 mb-2">
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6">
+        <div class="lg:col-span-2 flex flex-col sm:flex-row gap-4 mb-2">
             <div class="bg-card-light dark:bg-card-dark p-3 rounded-xl border border-gray-200 dark:border-[#324467] shadow-sm">
                 <p class="text-sm text-muted-light dark:text-muted-dark">Ingresos (periodo)</p>
                 <p id="report-total-income" class="text-green-600 font-bold text-xl">$0.00</p>
@@ -253,23 +260,23 @@
                 <p id="report-total-expense" class="text-red-600 font-bold text-xl">$0.00</p>
             </div>
         </div>
-        <div class="bg-card-light dark:bg-card-dark p-6 rounded-xl border border-gray-200 dark:border-[#324467] shadow-sm">
-            <h2 class="text-gray-900 dark:text-white text-lg font-bold mb-4">Gastos por mes</h2>
-            <div class="h-56">
+        <div class="bg-card-light dark:bg-card-dark p-4 sm:p-6 rounded-xl border border-gray-200 dark:border-[#324467] shadow-sm">
+            <h2 class="text-gray-900 dark:text-white text-base sm:text-lg font-bold mb-4">Gastos por mes</h2>
+            <div class="h-48 sm:h-56">
                 <canvas id="chart-expenses-over-time" style="width:100%;height:100%;display:block"></canvas>
             </div>
         </div>
         <!-- Stack both pie charts (gastos e ingresos) in the second column -->
-        <div class="flex flex-col gap-6">
-            <div class="bg-card-light dark:bg-card-dark p-6 rounded-xl border border-gray-200 dark:border-[#324467] shadow-sm">
-                <h2 class="text-gray-900 dark:text-white text-lg font-bold mb-4">Gastos por categoría</h2>
-                <div class="h-56">
+        <div class="flex flex-col gap-4 sm:gap-6">
+            <div class="bg-card-light dark:bg-card-dark p-4 sm:p-6 rounded-xl border border-gray-200 dark:border-[#324467] shadow-sm">
+                <h2 class="text-gray-900 dark:text-white text-base sm:text-lg font-bold mb-4">Gastos por categoría</h2>
+                <div class="h-48 sm:h-56">
                     <canvas id="chart-expenses-by-category" style="width:100%;height:100%;display:block"></canvas>
                 </div>
             </div>
-            <div class="bg-card-light dark:bg-card-dark p-6 rounded-xl border border-gray-200 dark:border-[#324467] shadow-sm">
-                <h2 class="text-gray-900 dark:text-white text-lg font-bold mb-4">Ingresos por categoría</h2>
-                <div class="h-56">
+            <div class="bg-card-light dark:bg-card-dark p-4 sm:p-6 rounded-xl border border-gray-200 dark:border-[#324467] shadow-sm">
+                <h2 class="text-gray-900 dark:text-white text-base sm:text-lg font-bold mb-4">Ingresos por categoría</h2>
+                <div class="h-48 sm:h-56">
                     <canvas id="chart-income-by-category" style="width:100%;height:100%;display:block"></canvas>
                 </div>
             </div>
@@ -279,7 +286,7 @@
     <!-- Reports Filter Modal -->
     <div id="reports-filter-modal" style="display:none" class="fixed inset-0 z-50 flex items-center justify-center p-4">
         <div class="absolute inset-0 bg-black/40" aria-hidden="true"></div>
-        <div class="relative w-full max-w-xl bg-card-light dark:bg-card-dark p-6 rounded-lg border border-gray-200 dark:border-[#324467]">
+        <div class="relative w-full max-w-xl bg-card-light dark:bg-card-dark p-4 sm:p-6 rounded-lg border border-gray-200 dark:border-[#324467] max-h-[90vh] overflow-y-auto">
             <h3 class="text-lg font-bold text-gray-900 dark:text-white mb-4">Filtros de reportes</h3>
             <div class="grid grid-cols-1 gap-4">
                 <div>
@@ -309,33 +316,33 @@
 </section>
 
 <section id="budgets-section" style="display:none">
-    <div class="flex items-center justify-between mb-6">
+    <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-6 mt-12 lg:mt-0">
         <div>
-            <h1 class="text-gray-900 dark:text-white text-3xl font-bold leading-tight">Budgets</h1>
+            <h1 class="text-gray-900 dark:text-white text-2xl sm:text-3xl font-bold leading-tight">Budgets</h1>
             <p class="text-muted-light dark:text-muted-dark">Crea y gestiona tus presupuestos para categorías.</p>
         </div>
-        <button id="open-create-budget" class="flex items-center gap-2 rounded-lg h-10 px-4 bg-primary text-white text-sm font-bold hover:bg-primary/90">+ Crear presupuesto</button>
+        <button id="open-create-budget" class="w-full sm:w-auto flex items-center justify-center gap-2 rounded-lg h-10 px-4 bg-primary text-white text-sm font-bold hover:bg-primary/90">+ Crear presupuesto</button>
     </div>
 
-    <div id="create-budget-form" class="bg-card-light dark:bg-card-dark p-6 rounded-xl border border-gray-200 dark:border-[#324467] shadow-sm mb-6" style="display:none">
-        <form id="budget-form" class="flex flex-wrap gap-4 items-end">
-            <div>
+    <div id="create-budget-form" class="bg-card-light dark:bg-card-dark p-4 sm:p-6 rounded-xl border border-gray-200 dark:border-[#324467] shadow-sm mb-6" style="display:none">
+        <form id="budget-form" class="grid grid-cols-1 sm:grid-cols-2 lg:flex lg:flex-wrap gap-4 items-end">
+            <div class="sm:col-span-1">
                 <label class="block text-sm font-medium text-muted-light dark:text-muted-dark mb-1">Nombre</label>
                 <input id="budget-name" type="text" class="form-input rounded-lg w-full" required />
             </div>
-            <div>
+            <div class="sm:col-span-1">
                 <label class="block text-sm font-medium text-muted-light dark:text-muted-dark mb-1">Categoría</label>
                 <select id="budget-category-select" class="form-select rounded-lg w-full">
                     <!-- options populated dynamically (expense categories) -->
                 </select>
             </div>
-            <div>
+            <div class="sm:col-span-1">
                 <label class="block text-sm font-medium text-muted-light dark:text-muted-dark mb-1">Asignado</label>
                 <input id="budget-amount" type="number" step="0.01" class="form-input rounded-lg w-full" required />
             </div>
-            <div class="flex items-center gap-2">
-                <button type="submit" class="flex items-center gap-2 rounded-lg h-10 px-4 bg-primary text-white text-sm font-bold hover:bg-primary/90">Guardar</button>
-                <button type="button" id="cancel-create-budget" class="flex items-center gap-2 rounded-lg h-10 px-4 bg-gray-200 text-sm hover:bg-gray-300">Cancelar</button>
+            <div class="sm:col-span-2 lg:col-span-1 flex items-center gap-2">
+                <button type="submit" class="flex-1 lg:flex-none flex items-center justify-center gap-2 rounded-lg h-10 px-4 bg-primary text-white text-sm font-bold hover:bg-primary/90">Guardar</button>
+                <button type="button" id="cancel-create-budget" class="flex-1 lg:flex-none flex items-center justify-center gap-2 rounded-lg h-10 px-4 bg-gray-200 text-sm hover:bg-gray-300">Cancelar</button>
             </div>
             <div class="w-full">
                 <p id="budget-create-error" class="text-sm text-red-600 mt-2" style="display:none"></p>
@@ -343,14 +350,14 @@
         </form>
     </div>
 
-    <div id="budgets-grid" class="grid grid-cols-1 md:grid-cols-3 gap-6">
+    <div id="budgets-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
         <!-- Budget cards injected here -->
     </div>
 
     <!-- Edit Budget Modal -->
     <div id="edit-budget-modal" style="display:none" class="fixed inset-0 z-50 flex items-center justify-center p-4">
         <div class="absolute inset-0 bg-black/40" aria-hidden="true"></div>
-        <div class="relative w-full max-w-md bg-card-light dark:bg-card-dark p-6 rounded-lg border border-gray-200 dark:border-[#324467]">
+        <div class="relative w-full max-w-md bg-card-light dark:bg-card-dark p-4 sm:p-6 rounded-lg border border-gray-200 dark:border-[#324467] max-h-[90vh] overflow-y-auto">
             <h3 class="text-lg font-bold text-gray-900 dark:text-white mb-4">Editar presupuesto</h3>
             <form id="edit-budget-form" class="grid grid-cols-1 gap-4">
                 <div>
@@ -376,10 +383,10 @@
 </section>
 
 <section id="settings-section" style="display:none">
-    <h1 class="text-gray-900 dark:text-white text-3xl font-bold leading-tight mb-4">Settings</h1>
-    <div class="bg-card-light dark:bg-card-dark p-6 rounded-xl border border-gray-200 dark:border-[#324467] shadow-sm mb-6">
-        <h2 class="text-lg font-bold mb-4">Account Preferences</h2>
-        <form id="settings-form" class="grid grid-cols-1 md:grid-cols-2 gap-4 items-end">
+    <h1 class="text-gray-900 dark:text-white text-2xl sm:text-3xl font-bold leading-tight mb-4 mt-12 lg:mt-0">Settings</h1>
+    <div class="bg-card-light dark:bg-card-dark p-4 sm:p-6 rounded-xl border border-gray-200 dark:border-[#324467] shadow-sm mb-6">
+        <h2 class="text-base sm:text-lg font-bold mb-4">Account Preferences</h2>
+        <form id="settings-form" class="grid grid-cols-1 sm:grid-cols-2 gap-4 items-end">
             <div>
                 <label class="block text-sm font-medium text-muted-light dark:text-muted-dark mb-1">Name</label>
                 <input id="setting-name" type="text" class="form-input rounded-lg w-full" />
@@ -388,13 +395,13 @@
                 <label class="block text-sm font-medium text-muted-light dark:text-muted-dark mb-1">Email</label>
                 <input id="setting-email" type="email" class="form-input rounded-lg w-full" />
             </div>
-            <div class="md:col-span-2 flex justify-end">
-                <button id="save-settings" type="button" class="flex items-center gap-2 rounded-lg h-10 px-4 bg-primary text-white text-sm font-bold hover:bg-primary/90">Save Changes</button>
+            <div class="sm:col-span-2 flex justify-end">
+                <button id="save-settings" type="button" class="w-full sm:w-auto flex items-center justify-center gap-2 rounded-lg h-10 px-4 bg-primary text-white text-sm font-bold hover:bg-primary/90">Save Changes</button>
             </div>
         </form>
     </div>
-    <div class="bg-card-light dark:bg-card-dark p-6 rounded-xl border border-gray-200 dark:border-[#324467] shadow-sm mb-6">
-        <h2 class="text-lg font-bold mb-4">Notifications</h2>
+    <div class="bg-card-light dark:bg-card-dark p-4 sm:p-6 rounded-xl border border-gray-200 dark:border-[#324467] shadow-sm mb-6">
+        <h2 class="text-base sm:text-lg font-bold mb-4">Notifications</h2>
         <div class="grid gap-4">
             <div class="flex items-center justify-between">
                 <div>
@@ -412,10 +419,10 @@
             </div>
         </div>
     </div>
-    <div class="bg-card-light dark:bg-card-dark p-6 rounded-xl border border-gray-200 dark:border-[#324467] shadow-sm">
-        <h2 class="text-lg font-bold mb-4">Currency</h2>
+    <div class="bg-card-light dark:bg-card-dark p-4 sm:p-6 rounded-xl border border-gray-200 dark:border-[#324467] shadow-sm">
+        <h2 class="text-base sm:text-lg font-bold mb-4">Currency</h2>
         <div>
-            <select id="setting-currency" class="form-select rounded-lg w-64">
+            <select id="setting-currency" class="form-select rounded-lg w-full sm:w-64">
                 <option value="COP">COP - Colombian Peso</option>
                 <option value="USD">USD - US Dollar</option>
                 <option value="EUR">EUR - Euro</option>
@@ -430,12 +437,12 @@
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script src="dashboard.js"></script>
 <!-- Toast container -->
-<div id="toast-container" class="fixed bottom-6 right-6 flex flex-col items-end gap-3 z-50"></div>
+<div id="toast-container" class="fixed bottom-4 right-4 sm:bottom-6 sm:right-6 flex flex-col items-end gap-3 z-50 max-w-[calc(100vw-2rem)] sm:max-w-md"></div>
 
 <!-- Reset confirmation modal -->
 <div id="reset-modal" style="display:none" class="fixed inset-0 z-50 flex items-center justify-center p-4" role="dialog" aria-modal="true" aria-labelledby="reset-modal-title" aria-describedby="reset-modal-desc">
     <div class="absolute inset-0 bg-black/40" aria-hidden="true"></div>
-    <div class="relative w-full max-w-md bg-card-light dark:bg-card-dark p-6 rounded-lg border border-gray-200 dark:border-[#324467]">
+    <div class="relative w-full max-w-md bg-card-light dark:bg-card-dark p-4 sm:p-6 rounded-lg border border-gray-200 dark:border-[#324467]">
         <h3 id="reset-modal-title" class="text-lg font-bold text-gray-900 dark:text-white mb-2">Confirmar restauración</h3>
         <p id="reset-modal-desc" class="text-sm text-muted-light dark:text-muted-dark mb-4">Esta acción eliminará todos los datos locales (transacciones, presupuestos, categorías y ajustes). Esta operación no se puede deshacer. ¿Deseas continuar?</p>
         <div class="flex justify-end gap-2">

@@ -19,6 +19,31 @@ function showSection(sectionId) {
 }
 
 window.addEventListener('DOMContentLoaded', () => {
+	// Mobile menu toggle
+	const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+	const mobileOverlay = document.getElementById('mobile-overlay');
+	const sidebar = document.getElementById('sidebar');
+	
+	function closeMobileMenu() {
+		sidebar.classList.remove('translate-x-0');
+		sidebar.classList.add('-translate-x-full');
+		mobileOverlay.style.display = 'none';
+	}
+	
+	function openMobileMenu() {
+		sidebar.classList.remove('-translate-x-full');
+		sidebar.classList.add('translate-x-0');
+		mobileOverlay.style.display = 'block';
+	}
+	
+	if (mobileMenuBtn) {
+		mobileMenuBtn.addEventListener('click', openMobileMenu);
+	}
+	
+	if (mobileOverlay) {
+		mobileOverlay.addEventListener('click', closeMobileMenu);
+	}
+	
 	const sidebarLinks = document.querySelectorAll(".sidebar-link");
 	sidebarLinks.forEach(link => {
 		link.addEventListener("click", () => {
@@ -27,6 +52,8 @@ window.addEventListener('DOMContentLoaded', () => {
 			link.classList.add("bg-primary/10", "dark:bg-[#232f48]", "text-primary", "dark:text-white");
 			link.classList.remove("text-gray-600", "dark:text-muted-dark");
 				showSection(link.dataset.section + "-section");
+				// Close mobile menu on navigation
+				closeMobileMenu();
 				// If user opened reports, ensure charts render now (container is visible)
 				if (link.dataset.section === 'reports' && typeof renderReports === 'function') {
 					renderReports();
@@ -429,10 +456,10 @@ window.addEventListener('DOMContentLoaded', () => {
 				const budgetBadge = linkedBudget ? `<span class="ml-2 inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-primary text-white">${linkedBudget.name}</span>` : '';
 				return `
 				<tr class="border-b border-gray-200 dark:border-[#324467] hover:bg-gray-50 dark:hover:bg-white/5">
-					<td class="p-4 text-sm text-gray-600 dark:text-gray-300">${date}</td>
-					<td class="p-4 text-sm font-medium text-gray-900 dark:text-white">${tr.desc}</td>
-					<td class="p-4 text-sm text-gray-600 dark:text-gray-300">${categoryBadge(tr.category)}${budgetBadge}</td>
-					<td class="p-4 text-sm font-medium ${tr.amount > 0 ? 'text-green-500 dark:text-green-400' : 'text-red-500 dark:text-red-400'} text-right">${sign}${formatted}</td>
+					<td class="p-2 sm:p-4 text-xs sm:text-sm text-gray-600 dark:text-gray-300">${date}</td>
+					<td class="p-2 sm:p-4 text-xs sm:text-sm font-medium text-gray-900 dark:text-white">${tr.desc}</td>
+					<td class="p-2 sm:p-4 text-xs sm:text-sm text-gray-600 dark:text-gray-300">${categoryBadge(tr.category)}${budgetBadge}</td>
+					<td class="p-2 sm:p-4 text-xs sm:text-sm font-medium ${tr.amount > 0 ? 'text-green-500 dark:text-green-400' : 'text-red-500 dark:text-red-400'} text-right">${sign}${formatted}</td>
 				</tr>
 			`}).join("");
 		}
@@ -446,10 +473,10 @@ window.addEventListener('DOMContentLoaded', () => {
 				const budgetBadge = linkedBudget ? `<span class="ml-2 inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-primary text-white">${linkedBudget.name}</span>` : '';
 				return `
 				<tr class="border-b border-gray-200 dark:border-[#324467] hover:bg-gray-50 dark:hover:bg-white/5">
-					<td class="p-4 text-sm text-gray-600 dark:text-gray-300">${date}</td>
-					<td class="p-4 text-sm font-medium text-gray-900 dark:text-white">${tr.desc}</td>
-					<td class="p-4 text-sm text-gray-600 dark:text-gray-300">${categoryBadge(tr.category)}${budgetBadge}</td>
-					<td class="p-4 text-sm font-medium ${tr.amount > 0 ? 'text-green-500 dark:text-green-400' : 'text-red-500 dark:text-red-400'} text-right">${sign}${formatted}</td>
+					<td class="p-2 sm:p-4 text-xs sm:text-sm text-gray-600 dark:text-gray-300">${date}</td>
+					<td class="p-2 sm:p-4 text-xs sm:text-sm font-medium text-gray-900 dark:text-white">${tr.desc}</td>
+					<td class="p-2 sm:p-4 text-xs sm:text-sm text-gray-600 dark:text-gray-300">${categoryBadge(tr.category)}${budgetBadge}</td>
+					<td class="p-2 sm:p-4 text-xs sm:text-sm font-medium ${tr.amount > 0 ? 'text-green-500 dark:text-green-400' : 'text-red-500 dark:text-red-400'} text-right">${sign}${formatted}</td>
 				</tr>
 			`}).join("");
 		}
